@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <head> <script language="javascript" type="text/javascript">alert("WARNING THIS WEBSITE IS AWESOME!")</script></head><font face="TimesNewRoman"><span style="font-size: 10pt; text-decoration: none"></span></a></font>
+        <title>Land Use ☻</title>
+        <style>
+            body {
+                background-image: url('images/8bit2.jpg');
+                background-repeat: no-repeat;
+                background-attachment:fixed;
+                background-size: 100% 100%;        
+        }
+            .main {
+            color: rgb(0, 0, 0);
+            text-align: center;
+        }
+            h1 {
+            font-size: 4.5em;
+            text-align: center;
+        }
+            p {
+                font-size: 1.1em; 
+            }
+
+            .two {
+                color: rgb(59, 11, 47);
+                text-align: center;
+                font-size: 3.5em;
+                text-shadow: 1px 1px 10px #fff, 1px 1px 10px #ccc;
+            }
+            .three {
+                color: rgb(59, 11, 47);
+                text-align: center;
+                font-size: 1em;
+                text-shadow: 1px 1px 10px #fff, 1px 1px 10px #ccc;
+            }
+            img {
+                margin:auto;
+            }
+            marquee{
+                width: 80%;
+            }
+
+        </style>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        
+        <style>
+            
+        #map {
+            width: 918px;
+            height: 673px;
+            margin: auto;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <!-- Logo is a link to my website -->
+        <marquee behavior = "slide" direction = "left" loop="1"><a href = 'https://alexrobinsongis.wordpress.com/'>
+            <img src="images/logo.png" width="300">
+        </a></marquee>
+        
+        <!-- Text -->
+        <p class = "three">Welcome to the Website ☻</p>
+        <h1>Land Use in the Kootenays</h1>
+        
+        <p class="main">This map shows different land uses in the Kootenay area including tenures, parks, ecological reserves, and ATES recreation areas</p>
+        
+        <!-- Map -->
+        <div id="map">
+        </div>
+        
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/ATESRecreationAreas_2.js"></script>
+        <script src="data/Alpineskiresorts_3.js"></script>
+        <script src="data/TimberLicenseTenures_4.js"></script>
+        <script src="data/ParksandEcologicalReserves_5.js"></script>
+        <!-- Text Below the Map -->
+        <p class='two'>Respect the Land</p>
+        
+        <!-- map script -->
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[47.984420797645384,-123.16052992326796],[51.77775535414185,-115.11864746774003]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_ESRIGraylight_0');
+        map.getPane('pane_ESRIGraylight_0').style.zIndex = 400;
+        var layer_ESRIGraylight_0 = L.tileLayer('http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRIGraylight_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_ESRIGraylight_0;
+        map.addLayer(layer_ESRIGraylight_0);
+        map.createPane('pane_ESRITransportation_1');
+        map.getPane('pane_ESRITransportation_1').style.zIndex = 401;
+        var layer_ESRITransportation_1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRITransportation_1',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_ESRITransportation_1;
+        map.addLayer(layer_ESRITransportation_1);
+        function pop_ATESRecreationAreas_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">BNDRY_ID</th>\
+                        <td>' + (feature.properties['BNDRY_ID'] !== null ? autolinker.link(feature.properties['BNDRY_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">BNDRY_NAME</th>\
+                        <td>' + (feature.properties['BNDRY_NAME'] !== null ? autolinker.link(feature.properties['BNDRY_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PROD_TYPE</th>\
+                        <td>' + (feature.properties['PROD_TYPE'] !== null ? autolinker.link(feature.properties['PROD_TYPE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">URL</th>\
+                        <td>' + (feature.properties['URL'] !== null ? autolinker.link(feature.properties['URL'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_SQM</th>\
+                        <td>' + (feature.properties['AREA_SQM'] !== null ? autolinker.link(feature.properties['AREA_SQM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FEAT_LEN</th>\
+                        <td>' + (feature.properties['FEAT_LEN'] !== null ? autolinker.link(feature.properties['FEAT_LEN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ATESRecreationAreas_2_0() {
+            return {
+                pane: 'pane_ATESRecreationAreas_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,125,183,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ATESRecreationAreas_2');
+        map.getPane('pane_ATESRecreationAreas_2').style.zIndex = 402;
+        map.getPane('pane_ATESRecreationAreas_2').style['mix-blend-mode'] = 'normal';
+        var layer_ATESRecreationAreas_2 = new L.geoJson(json_ATESRecreationAreas_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ATESRecreationAreas_2',
+            layerName: 'layer_ATESRecreationAreas_2',
+            pane: 'pane_ATESRecreationAreas_2',
+            onEachFeature: pop_ATESRecreationAreas_2,
+            style: style_ATESRecreationAreas_2_0,
+        });
+        bounds_group.addLayer(layer_ATESRecreationAreas_2);
+        map.addLayer(layer_ATESRecreationAreas_2);
+        function pop_Alpineskiresorts_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">TA_SKI_ID</th>\
+                        <td>' + (feature.properties['TA_SKI_ID'] !== null ? autolinker.link(feature.properties['TA_SKI_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RSRT_NM</th>\
+                        <td>' + (feature.properties['RSRT_NM'] !== null ? autolinker.link(feature.properties['RSRT_NM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CL_FILE</th>\
+                        <td>' + (feature.properties['CL_FILE'] !== null ? autolinker.link(feature.properties['CL_FILE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TNR_TYP_1</th>\
+                        <td>' + (feature.properties['TNR_TYP_1'] !== null ? autolinker.link(feature.properties['TNR_TYP_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TNR_TYP_2</th>\
+                        <td>' + (feature.properties['TNR_TYP_2'] !== null ? autolinker.link(feature.properties['TNR_TYP_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PRJ_STATUS</th>\
+                        <td>' + (feature.properties['PRJ_STATUS'] !== null ? autolinker.link(feature.properties['PRJ_STATUS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_HA</th>\
+                        <td>' + (feature.properties['AREA_HA'] !== null ? autolinker.link(feature.properties['AREA_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>FCODE</strong><br />' + (feature.properties['FCODE'] !== null ? autolinker.link(feature.properties['FCODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_SQM</th>\
+                        <td>' + (feature.properties['AREA_SQM'] !== null ? autolinker.link(feature.properties['AREA_SQM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">LENGTH_M</th>\
+                        <td>' + (feature.properties['LENGTH_M'] !== null ? autolinker.link(feature.properties['LENGTH_M'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SHAPE</th>\
+                        <td>' + (feature.properties['SHAPE'] !== null ? autolinker.link(feature.properties['SHAPE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">OBJCTID</th>\
+                        <td>' + (feature.properties['OBJCTID'] !== null ? autolinker.link(feature.properties['OBJCTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Alpineskiresorts_3_0() {
+            return {
+                pane: 'pane_Alpineskiresorts_3',
+                opacity: 1,
+                color: 'rgba(128,14,16,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(228,26,28,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Alpineskiresorts_3');
+        map.getPane('pane_Alpineskiresorts_3').style.zIndex = 403;
+        map.getPane('pane_Alpineskiresorts_3').style['mix-blend-mode'] = 'normal';
+        var layer_Alpineskiresorts_3 = new L.geoJson(json_Alpineskiresorts_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Alpineskiresorts_3',
+            layerName: 'layer_Alpineskiresorts_3',
+            pane: 'pane_Alpineskiresorts_3',
+            onEachFeature: pop_Alpineskiresorts_3,
+            style: style_Alpineskiresorts_3_0,
+        });
+        bounds_group.addLayer(layer_Alpineskiresorts_3);
+        map.addLayer(layer_Alpineskiresorts_3);
+        function pop_TimberLicenseTenures_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">FFID</th>\
+                        <td>' + (feature.properties['FFID'] !== null ? autolinker.link(feature.properties['FFID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">MAP_BLK_ID</th>\
+                        <td>' + (feature.properties['MAP_BLK_ID'] !== null ? autolinker.link(feature.properties['MAP_BLK_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CLNTNMBR</th>\
+                        <td>' + (feature.properties['CLNTNMBR'] !== null ? autolinker.link(feature.properties['CLNTNMBR'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CLNTLCTNCD</th>\
+                        <td>' + (feature.properties['CLNTLCTNCD'] !== null ? autolinker.link(feature.properties['CLNTLCTNCD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CLNTNM</th>\
+                        <td>' + (feature.properties['CLNTNM'] !== null ? autolinker.link(feature.properties['CLNTNM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">BLK_GR_HA</th>\
+                        <td>' + (feature.properties['BLK_GR_HA'] !== null ? autolinker.link(feature.properties['BLK_GR_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">BLK_EL_HA</th>\
+                        <td>' + (feature.properties['BLK_EL_HA'] !== null ? autolinker.link(feature.properties['BLK_EL_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">BLK_NET_HA</th>\
+                        <td>' + (feature.properties['BLK_NET_HA'] !== null ? autolinker.link(feature.properties['BLK_NET_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RETIRE_DT</th>\
+                        <td>' + (feature.properties['RETIRE_DT'] !== null ? autolinker.link(feature.properties['RETIRE_DT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AMEND_ID</th>\
+                        <td>' + (feature.properties['AMEND_ID'] !== null ? autolinker.link(feature.properties['AMEND_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FFCTVDT</th>\
+                        <td>' + (feature.properties['FFCTVDT'] !== null ? autolinker.link(feature.properties['FFCTVDT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">XPRDT</th>\
+                        <td>' + (feature.properties['XPRDT'] !== null ? autolinker.link(feature.properties['XPRDT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">MAP_LABEL</th>\
+                        <td>' + (feature.properties['MAP_LABEL'] !== null ? autolinker.link(feature.properties['MAP_LABEL'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FEAT_AREA</th>\
+                        <td>' + (feature.properties['FEAT_AREA'] !== null ? autolinker.link(feature.properties['FEAT_AREA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FEAT_PERIM</th>\
+                        <td>' + (feature.properties['FEAT_PERIM'] !== null ? autolinker.link(feature.properties['FEAT_PERIM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FEAT_CLASS</th>\
+                        <td>' + (feature.properties['FEAT_CLASS'] !== null ? autolinker.link(feature.properties['FEAT_CLASS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FILE_ST_CD</th>\
+                        <td>' + (feature.properties['FILE_ST_CD'] !== null ? autolinker.link(feature.properties['FILE_ST_CD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">REGION_CD</th>\
+                        <td>' + (feature.properties['REGION_CD'] !== null ? autolinker.link(feature.properties['REGION_CD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">REGION_NM</th>\
+                        <td>' + (feature.properties['REGION_NM'] !== null ? autolinker.link(feature.properties['REGION_NM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">LIFE_ST_CD</th>\
+                        <td>' + (feature.properties['LIFE_ST_CD'] !== null ? autolinker.link(feature.properties['LIFE_ST_CD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_SQM</th>\
+                        <td>' + (feature.properties['AREA_SQM'] !== null ? autolinker.link(feature.properties['AREA_SQM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FEAT_LEN</th>\
+                        <td>' + (feature.properties['FEAT_LEN'] !== null ? autolinker.link(feature.properties['FEAT_LEN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_TimberLicenseTenures_4_0() {
+            return {
+                pane: 'pane_TimberLicenseTenures_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(164,113,88,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_TimberLicenseTenures_4');
+        map.getPane('pane_TimberLicenseTenures_4').style.zIndex = 404;
+        map.getPane('pane_TimberLicenseTenures_4').style['mix-blend-mode'] = 'normal';
+        var layer_TimberLicenseTenures_4 = new L.geoJson(json_TimberLicenseTenures_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TimberLicenseTenures_4',
+            layerName: 'layer_TimberLicenseTenures_4',
+            pane: 'pane_TimberLicenseTenures_4',
+            onEachFeature: pop_TimberLicenseTenures_4,
+            style: style_TimberLicenseTenures_4_0,
+        });
+        bounds_group.addLayer(layer_TimberLicenseTenures_4);
+        map.addLayer(layer_TimberLicenseTenures_4);
+        function pop_ParksandEcologicalReserves_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">ADMIN_AREA</th>\
+                        <td>' + (feature.properties['ADMIN_AREA'] !== null ? autolinker.link(feature.properties['ADMIN_AREA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PROT_NAME</th>\
+                        <td>' + (feature.properties['PROT_NAME'] !== null ? autolinker.link(feature.properties['PROT_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PROT_CODE</th>\
+                        <td>' + (feature.properties['PROT_CODE'] !== null ? autolinker.link(feature.properties['PROT_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PROT_DESG</th>\
+                        <td>' + (feature.properties['PROT_DESG'] !== null ? autolinker.link(feature.properties['PROT_DESG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PARK_CLASS</th>\
+                        <td>' + (feature.properties['PARK_CLASS'] !== null ? autolinker.link(feature.properties['PARK_CLASS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SRV_GEN_PL</th>\
+                        <td>' + (feature.properties['SRV_GEN_PL'] !== null ? autolinker.link(feature.properties['SRV_GEN_PL'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ORC_PRIMRY</th>\
+                        <td>' + (feature.properties['ORC_PRIMRY'] !== null ? autolinker.link(feature.properties['ORC_PRIMRY'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ORC_SCNDRY</th>\
+                        <td>' + (feature.properties['ORC_SCNDRY'] !== null ? autolinker.link(feature.properties['ORC_SCNDRY'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">EST_DATE</th>\
+                        <td>' + (feature.properties['EST_DATE'] !== null ? autolinker.link(feature.properties['EST_DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">OFFL_AR_HA</th>\
+                        <td>' + (feature.properties['OFFL_AR_HA'] !== null ? autolinker.link(feature.properties['OFFL_AR_HA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PMP_URL</th>\
+                        <td>' + (feature.properties['PMP_URL'] !== null ? autolinker.link(feature.properties['PMP_URL'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">F_CODE</th>\
+                        <td>' + (feature.properties['F_CODE'] !== null ? autolinker.link(feature.properties['F_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SHAPE</th>\
+                        <td>' + (feature.properties['SHAPE'] !== null ? autolinker.link(feature.properties['SHAPE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_SQM</th>\
+                        <td>' + (feature.properties['AREA_SQM'] !== null ? autolinker.link(feature.properties['AREA_SQM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FEAT_LEN</th>\
+                        <td>' + (feature.properties['FEAT_LEN'] !== null ? autolinker.link(feature.properties['FEAT_LEN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">OBJECTID</th>\
+                        <td>' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ParksandEcologicalReserves_5_0() {
+            return {
+                pane: 'pane_ParksandEcologicalReserves_5',
+                opacity: 1,
+                color: 'rgba(128,14,16,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ParksandEcologicalReserves_5');
+        map.getPane('pane_ParksandEcologicalReserves_5').style.zIndex = 405;
+        map.getPane('pane_ParksandEcologicalReserves_5').style['mix-blend-mode'] = 'normal';
+        var layer_ParksandEcologicalReserves_5 = new L.geoJson(json_ParksandEcologicalReserves_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ParksandEcologicalReserves_5',
+            layerName: 'layer_ParksandEcologicalReserves_5',
+            pane: 'pane_ParksandEcologicalReserves_5',
+            onEachFeature: pop_ParksandEcologicalReserves_5,
+            style: style_ParksandEcologicalReserves_5_0,
+        });
+        bounds_group.addLayer(layer_ParksandEcologicalReserves_5);
+        map.addLayer(layer_ParksandEcologicalReserves_5);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/ParksandEcologicalReserves_5.png" /> Parks and Ecological Reserves': layer_ParksandEcologicalReserves_5,'<img src="legend/TimberLicenseTenures_4.png" /> Timber License Tenures': layer_TimberLicenseTenures_4,'<img src="legend/Alpineskiresorts_3.png" /> Alpine ski resorts': layer_Alpineskiresorts_3,'<img src="legend/ATESRecreationAreas_2.png" /> ATES Recreation Areas': layer_ATESRecreationAreas_2,"ESRI Transportation": layer_ESRITransportation_1,"ESRI Gray (light)": layer_ESRIGraylight_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
